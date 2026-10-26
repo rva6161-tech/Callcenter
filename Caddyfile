@@ -1,0 +1,27 @@
+{
+	auto_https disable_redirects
+	default_sni 52.91.226.27
+}
+
+# Primary: HTTPS app on standard port 443 (https://52.91.226.27)
+https://52.91.226.27 {
+	tls internal
+	handle /api/* {
+		reverse_proxy localhost:8000
+	}
+	handle {
+		root * /home/ubuntu/app/frontend/dist
+		try_files {path} /index.html
+		file_server
+	}
+}
+
+# Plain HTTP on 80 -> redirect to HTTPS
+http://52.91.226.27 {
+	redir https://52.91.226.27{uri}
+}
+
+# Old :3000 (now HTTP-only) -> redirect to HTTPS primary (fixes "HTTP request to HTTPS server")
+http://52.91.226.27:3000 {
+	redir https://52.91.226.27{uri}
+}
