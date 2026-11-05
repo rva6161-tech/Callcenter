@@ -20,3 +20,9 @@ dist/
 .DS_Store
 .vscode/
 .idea/
+
+# Terraform
+infra/.terraform/
+infra/*.tfstate*
+infra/*.tfvars
+infra/tfplan
